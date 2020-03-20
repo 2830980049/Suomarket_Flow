@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.Mapper.base.CheckerBaseMapper">
+    <insert id="insert_goods_records">
+        insert into goods_records
+        (
+        <trim suffixOverrides=",">
+            <if test="goods_id != null">
+                goods_id,
+            </if>
+            <if test="trade_id != null and trade_id != ''">
+                trade_id,
+            </if>
+            <if test="trade_name != null and trade_name != ''">
+                trade_name,
+            </if>
+            <if test="trade_type != null and trade_type != ''">
+                trade_type,
+            </if>
+            discount_type,
+            trade_number,
+            <if test="status != null and status != ''">
+                status,
+            </if>
+            total,
+        </trim>
+        )
+        values (
+        <trim suffixOverrides=",">
+            <if test="goods_id != null">
+                #{goods_id},
+            </if>
+            <if test="trade_id != null and trade_id != ''">
+                #{trade_id},
+            </if>
+            <if test="trade_name != null and trade_name != ''">
+                #{trade_name},
+            </if>
+            <if test="trade_type != null and trade_type != ''">
+                #{trade_type},
+            </if>
+            #{discount_type},
+            #{trade_number},
+            <if test="status != null and status != ''">
+                #{status},
+            </if>
+            #{total},
+        </trim>
+        )
+    </insert>
+
+    <update id="update_status">
+        update goods_records
+        <set>
+            <if test="trade_id != null and trade_id != ''">
+                trade_id = #{trade_id},
+            </if>
+            <if test="trade_name != null and trade_name != ''">
+                trade_name = #{trade_name},
+            </if>
+            <if test="trade_type != null and trade_type != ''">
+                trade_type = #{trade_type},
+            </if>
+            <if test="trade_number != null">
+                trade_number = #{trade_number},
+            </if>
+            <if test="discount_type != null and discount_type != ''">
+                discount_type = #{discount_type},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+        </set>
+        where goods_id = #{goods_id}
+    </update>
+
+    <delete id="delete_goods_records">
+        delete from goods_records where goods_second_id=#{goods_second_id}
+    </delete>
+
+    <resultMap type="com.edu.Pojo.User" id="Checker">
+        <result property="account" column="account"></result>
+        <result property="username" column="username"></result>
+        <result property="passwords" column="passwords"></result>
+        <result property="sex" column="sex"></result>
+        <result property="birthday" column="birthday"></result>
+        <result property="phone" column="phone"></result>
+        <result property="positions" column="positions"></result>
+    </resultMap>
+
+    <resultMap type="com.edu.Pojo.Goods_records" id="Goods">
+        <result property="goods_id" column="goods_id"></result>
+        <result property="trade_id" column="trade_id"></result>
+        <result property="trade_name" column="trade_name"></result>
+        <result property="trade_type" column="trade_type"></result>
+        <result property="trade_number" column="trade_number"></result>
+        <result property="discount_type" column="discount_type"></result>
+        <result property="status" column="status"></result>
+        <result property="total" column="total"></result>
+    </resultMap>
+
+    <select id="queryChecker" resultMap="Checker">
+        select * from user
+        <where>
+            <if test="account!=null and account!=''">
+                and account=#{account}
+            </if>
+            <if test="username!=null and username!=''">
+                and username=#{username}
+            </if>
+            <if test="passwords!=null and passwords!=''">
+                and passwords=#{passwords}
+            </if>
+            <if test="sex!=null and sex!=''">
+                and sex=#{sex}
+            </if>
+            <if test="birthday!=null">
+                and birthday=#{birthday}
+            </if>
+            <if test="phone!=null">
+                and phone=#{phone}
+            </if>
+            <if test="positions!=null and positions!=''">
+                and positions=#{position}
+            </if>
+        </where>
+    </select>
+
+    <select id="Max" resultType="int">
+        SELECT MAX(goods_id) FROM goods_records;
+    </select>
+
+</mapper>
