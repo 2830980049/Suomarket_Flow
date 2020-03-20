@@ -143,8 +143,6 @@ public class AdminController {
         return mav;
     }
 
-
-
     @RequestMapping(value = "/addtrade.do",method = RequestMethod.POST)
     public ModelAndView addtrade1(@RequestParam String trade_type, @RequestParam String trade_type_id, @RequestParam String trade_id,
                                   @RequestParam String trade_name, @RequestParam String trade_value,@RequestParam String trade_number,
