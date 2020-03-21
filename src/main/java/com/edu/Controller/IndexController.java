@@ -89,7 +89,11 @@ public class IndexController {
         user.setPasswords(password);
         user = checkerService.selectOne(user);
         System.out.println(user);
-        if(user != null){
+        //验证码
+        String code = (String)request.getSession().getAttribute("checkCode");
+        String code1 = request.getParameter("checkCode");
+        System.out.println(code + " " + code1);
+        if(user != null && code1.equalsIgnoreCase(code)){
             request.getSession().setAttribute("user", user);
             switch (user.getPositions().toString()){
                 case "0":
@@ -101,8 +105,10 @@ public class IndexController {
                     return  new ModelAndView("login","msg","用户名或者密码错误");
             }
         }
-        else
+        else if(user == null)
             return  new ModelAndView("login","msg","用户名或者密码错误");
+        else
+            return  new ModelAndView("login","msg","验证码错误");
     }
 
     @RequestMapping(value = "/discount")

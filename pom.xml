@@ -27,6 +27,7 @@
     <mybatis.version>3.4.6</mybatis.version>
   </properties>
 
+
   <dependencies>
     <!-- java EE -->
     <dependency>
@@ -114,6 +115,9 @@
       <artifactId>log4j-api</artifactId>
       <version>2.11.1</version>
     </dependency>
+
+    <!--Kaptcha框架 验证码 -->
+
 
     <!-- JSON -->
     <dependency>

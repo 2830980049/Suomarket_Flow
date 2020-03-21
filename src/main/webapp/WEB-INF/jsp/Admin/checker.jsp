@@ -257,6 +257,14 @@
                                         <option>收银员</option>
                                     </select>
                                 </td>
+                                <td><label>验证码</label></td>
+                                <td>
+                                    <input class="code" required id="checkCode" name="checkCode"  type="text"/>
+                                    <span class="msg-default hidden"></span>
+                                    <img id="change" name="change" onclick="checkCodes()" src="<%=ctxPath%>/KaptchaServlet">
+                                </td>
+                            </tr>
+                            <tr>
                                 <td></td>
                                 <td>
                                     <input hidden id="check" name="check">
@@ -291,6 +299,12 @@
 </div>
 
 <script type="text/javascript">
+
+    function checkCodes() {
+        var idx = document.getElementById("change");
+        idx.src = "<%=ctxPath%>/KaptchaServlet?time" + new Date().getTime();
+    }
+
     function sub() {
         var inputs = document.getElementsByTagName("input");
         var count = 0;

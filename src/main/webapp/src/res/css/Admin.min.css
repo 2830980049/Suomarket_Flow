@@ -11,6 +11,13 @@
 
 }
 
+.code{
+    border-radius: 5px;
+    width:200px;
+    height: 35px;
+    float: left;
+    line-height:35px;
+}
 
 .form-group > input {
     border-radius: 5px;

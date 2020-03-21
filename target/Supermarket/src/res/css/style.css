@@ -154,6 +154,10 @@ input[type="text"], input[type="password"] {
 
 }
 
+.checkCodes{
+    float: left;
+}
+
 input[type="text"] {
     background: url("../img/mail.png") no-repeat 10px 11px;
     background-size: 24px;

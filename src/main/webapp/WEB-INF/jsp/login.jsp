@@ -40,17 +40,22 @@
                 <input id="password" name="password" onfocus="this.value = '';" required type="password"
                        value=""/>
             </label>
-            <span>
-                        <label>
-                            <input type="checkbox"/>
-                        </label>
-                        记住我
-                    </span>
+            <label>
+                <input id="checkCode" name="checkCode" onfocus="this.value = '';" required type="text"
+                       placeholder="验证码"/>
+                <img id="change" name="change" onclick="checkCodes()" src="<%=ctxPath%>/KaptchaServlet">
+            </label>
             <div class="clear" style="color: red">${msg}</div>
             <input name="login" type="submit" value="登 录">
         </form>
     </div>
 </div>
+<script type="text/javascript">
+    function checkCodes() {
+        var idx = document.getElementById("change");
+        idx.src = "<%=ctxPath%>/KaptchaServlet?time" + new Date().getTime();
+    }
+</script>
 <!--//main-->
 </body>
 </html>
