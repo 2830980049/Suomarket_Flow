@@ -144,7 +144,7 @@
                         </ul>
                     </li>
                     <li class="dropdown user user-menu">
-                        <a class="dropdown-toggle"  href="<%=ctxPath%>/login.do">
+                        <a class="dropdown-toggle"  href="<%=ctxPath%>/destory_Servlet.do">
                             <span class="hidden-xs">退出</span>
                         </a>
                     </li>
