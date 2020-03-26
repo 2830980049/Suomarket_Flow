@@ -32,73 +32,87 @@ public class CheckController {
     @Autowired
     AdminService adminService;
 
+    @RequestMapping(value = "/login.do", method = RequestMethod.GET)
+    public ModelAndView login(){
+        return new ModelAndView("login");
+    }
+
     @RequestMapping(value = "/addsell.do",method = RequestMethod.POST)
     public ModelAndView addtrade1(@RequestParam String trade_id, @RequestParam String trade_name, @RequestParam String trade_type, @RequestParam String discount_type,
                                   @RequestParam String trade_number,HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         ModelAndView mav = new ModelAndView("Checker/Create_trade") ;
-        Integer max = checkerService.Maxs();
-        max += 1;
-        Goods_records goods_records = new Goods_records();
-        goods_records.setGoods_id(max);
-        goods_records.setTrade_id(trade_id);
-
-        Trade trade = new Trade();
-        trade.setTrade_id(trade_id);
-        System.out.println("trade_id = "+trade.getTrade_id());
-        List<Trade> list = adminService.queryAll(trade);
-        Double num = list.get(0).getTrade_value();
-        num = num * Integer.parseInt(trade_number);
-        goods_records.setTrade_type(trade_type);
-        goods_records.setTrade_number(Integer.parseInt(trade_number));
-        goods_records.setTrade_name(trade_name);
-        goods_records.setStatus("已出售");
-
-        File sourceFile = null;
-        if(num < 200)
-            sourceFile = ResourceUtils.getFile("classpath:No_discount");
-            else if(num >= 200 && num < 500)
-                 sourceFile = ResourceUtils.getFile("classpath:discount1");
-                else sourceFile = ResourceUtils.getFile("classpath:discount2");
-
-        String discounts = null;
-
-        StringBuffer buf = new StringBuffer();
-        try {
-            Reader in = new FileReader(sourceFile);
-            char[] cs = new char[1];
-            int len = -1;
-
-            while ((len = in.read(cs)) != -1) {
-                buf.append(new String(cs, 0, len));
-            }
-            in.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        String code = request.getParameter("checkCode");
+        String code1 = (String)request.getSession().getAttribute("checkCode");
+        System.out.println(code + " " + code1);
+        if(code.equalsIgnoreCase(code1) == false){
+            mav.addObject("checkCodes","10");
+            return mav;
         }
-        discounts = buf.toString();
-        System.out.println(discounts);
-        Double total = 0.0;
-        if(discounts.equals("No discount")){ }
-            else if(discounts.equals("Full 200 minus 50"))
+        else {
+            Integer max = checkerService.Maxs();
+            max += 1;
+            Goods_records goods_records = new Goods_records();
+            goods_records.setGoods_id(max);
+            goods_records.setTrade_id(trade_id);
+
+            Trade trade = new Trade();
+            trade.setTrade_id(trade_id);
+            System.out.println("trade_id = " + trade.getTrade_id());
+            List<Trade> list = adminService.queryAll(trade);
+            Double num = list.get(0).getTrade_value();
+            num = num * Integer.parseInt(trade_number);
+            goods_records.setTrade_type(trade_type);
+            goods_records.setTrade_number(Integer.parseInt(trade_number));
+            goods_records.setTrade_name(trade_name);
+            goods_records.setStatus("已出售");
+
+            File sourceFile = null;
+            if (num < 200)
+                sourceFile = ResourceUtils.getFile("classpath:No_discount");
+            else if (num >= 200 && num < 500)
+                sourceFile = ResourceUtils.getFile("classpath:discount1");
+            else sourceFile = ResourceUtils.getFile("classpath:discount2");
+
+            String discounts = null;
+
+            StringBuffer buf = new StringBuffer();
+            try {
+                Reader in = new FileReader(sourceFile);
+                char[] cs = new char[1];
+                int len = -1;
+
+                while ((len = in.read(cs)) != -1) {
+                    buf.append(new String(cs, 0, len));
+                }
+                in.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            discounts = buf.toString();
+            System.out.println(discounts);
+            Double total = 0.0;
+            if (discounts.equals("No discount")) {
+            } else if (discounts.equals("Full 200 minus 50"))
                 num -= 50;
-                    else
-                        num *= 0.7;
-        goods_records.setDiscount_type(discounts);
-        goods_records.setTotal(num);
-        System.out.println(discounts);
-        System.out.println(goods_records.getTotal());
-        boolean m = checkerService.addGoods(goods_records);
-        System.out.println("maxs m ="+max);
-        if(m)
-            mav.addObject("flag","1");
-        else
-            mav.addObject("flag","0");
-        mav.addObject("total",num.toString());
-        return mav;
+            else
+                num *= 0.7;
+            goods_records.setDiscount_type(discounts);
+            goods_records.setTotal(num);
+            System.out.println(discounts);
+            System.out.println(goods_records.getTotal());
+            boolean m = checkerService.addGoods(goods_records);
+            System.out.println("maxs m =" + max);
+            if (m)
+                mav.addObject("flag", "1");
+            else
+                mav.addObject("flag", "0");
+            mav.addObject("total", num.toString());
+            return mav;
+        }
     }
 
     @RequestMapping(value = "/updatestatus.do",method = RequestMethod.GET)

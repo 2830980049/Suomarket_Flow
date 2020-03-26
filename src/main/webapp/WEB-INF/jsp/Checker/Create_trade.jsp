@@ -107,6 +107,7 @@
 <%
     String flag = (String) request.getAttribute("flag");
     //String total = (String) request.getAttribute("total");
+    String checkCodes = (String)request.getAttribute("checkCodes");
     if (flag == "1") {%>
 <script>
     swal("添加成功！消费总额：${total}元", "数据已成功添加到数据库", "success");
@@ -118,6 +119,13 @@
     swal("添加失败！", "未知错误！", "error");
 </script>
 <%}%>
+<%
+    if(checkCodes == "10"){
+%>
+<script>swal("验证码错误！", "已知错误！", "error");</script>
+<%
+    }
+%>
 
 <div class="wrapper">
     <header class="main-header">
@@ -228,6 +236,13 @@
                                 <span class="msg-success"></span>
                             </td>
                         </tr>
+                        <tr>
+                            <td><label>验证码</label></td>
+                            <td>
+                                <input class="code" required id="checkCode" name="checkCode"  type="text"/>
+                                <img id="change" name="change" onclick="checkCodes();" src="<%=ctxPath%>/KaptchaServlet">
+                            </td>
+                        </tr>
                     </table>
                     <input class="btn btn-default" id="bt-register" type="button" value="提交" onclick="sub();"/>
                     <input class="btn btn-default" type="reset" value="重置">
@@ -241,7 +256,8 @@
         <div class="pull-right hidden-xs">
             <b>Version</b> 1.0.0
         </div>
-        <strong>CRAETE TO 2019.12.4 Admin WUQILI.</strong> 保留所有权
+        <strong>CRAETE TO 2019.12.4 Admin WUQILI.</strong> 保留所有权<br/><br/>
+        <strong><a href="http://www.beian.miit.gov.cn/" style="color: #605ca8">黔ICP备20002057号</a> </strong>
     </footer>
     <script type="text/javascript">
 
@@ -256,6 +272,11 @@
 </div>
 
 <script type="text/javascript">
+    function checkCodes() {
+        var idx = document.getElementById("change");
+        idx.src = "<%=ctxPath%>/KaptchaServlet?time" + new Date().getTime();
+    }
+
     function sub() {
         var inputs = document.getElementsByTagName("input");
         var count = 0;

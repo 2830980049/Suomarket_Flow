@@ -44,6 +44,11 @@ public class AdminController {
         return new ModelAndView("Admin/checker");
     }
 
+    @RequestMapping(value = "/login.do", method = RequestMethod.GET)
+    public ModelAndView login(){
+        return new ModelAndView("login");
+    }
+
     @RequestMapping(value = "/update.do",method = RequestMethod.GET)
     public ModelAndView updates(@RequestParam String account){
         ModelAndView mav = new ModelAndView("Admin/checker");
@@ -146,8 +151,12 @@ public class AdminController {
     @RequestMapping(value = "/addtrade.do",method = RequestMethod.POST)
     public ModelAndView addtrade1(@RequestParam String trade_type, @RequestParam String trade_type_id, @RequestParam String trade_id,
                                   @RequestParam String trade_name, @RequestParam String trade_value,@RequestParam String trade_number,
-                                  @RequestParam String check,HttpServletResponse response)throws ServletException, IOException{
+                                  @RequestParam String check,HttpServletRequest request,HttpServletResponse response)throws ServletException, IOException{
         ModelAndView mav = new ModelAndView("Admin/trade") ;
+        List<Trade> type = adminService.queryTypeAll(null);
+        for(Trade s:type)
+            System.out.println(s);
+        mav.addObject("list",type);
         Trade trade = new Trade();
         trade.setTrade_id(trade_id);
         trade.setTrade_type(trade_type);
@@ -155,25 +164,33 @@ public class AdminController {
         trade.setTrade_value(Double.parseDouble(trade_value));
         trade.setTrade_name(trade_name);
         trade.setTrade_type_id(trade_type_id);
-        boolean flag = false;
-        System.out.println(check);
-        if(check.equals("1")) {
-            flag = adminService.insertTrade(trade);
-            System.out.println("check m ="+flag);
-            if(flag)
-                mav.addObject("flag","1");
-            else
-                mav.addObject("flag","0");
+        String code = request.getParameter("checkCode");
+        String code1 = (String)request.getSession().getAttribute("checkCode");
+        System.out.println(code + " " + code1);
+        if(code.equalsIgnoreCase(code1) == false) {
+            mav.addObject("checkCodes","10");
+            return mav;
         }
-        else if(check.equals("0")){
-            flag = adminService.updatasTrade(trade);
-            System.out.println("check m = "+flag);
-            if (flag)
-                mav.addObject("flag", "4");
-            else
-                mav.addObject("flag", "5");
+        else {
+            boolean flag = false;
+            System.out.println(check);
+            if (check.equals("1")) {
+                flag = adminService.insertTrade(trade);
+                System.out.println("check m =" + flag);
+                if (flag)
+                    mav.addObject("flag", "1");
+                else
+                    mav.addObject("flag", "0");
+            } else if (check.equals("0")) {
+                flag = adminService.updatasTrade(trade);
+                System.out.println("check m = " + flag);
+                if (flag)
+                    mav.addObject("flag", "4");
+                else
+                    mav.addObject("flag", "5");
+            }
+            return mav;
         }
-        return mav;
     }
 
     @RequestMapping("/query_id")
@@ -230,31 +247,40 @@ public class AdminController {
         user.setBirthday(Date.valueOf(birthday));
         user.setUsername(username);
         user.setPasswords(passwords);
-        if(positions.equals("管理员"))
-            user.setPositions(0);
-        else
-            user.setPositions(1);
-        System.out.println(user);
-        boolean m = false;
-        System.out.println(check);
+        String code = request.getParameter("checkCode");
+        String code1 = (String)request.getSession().getAttribute("checkCode");
+        System.out.println(code + " " + code1);
         ModelAndView mav = new ModelAndView("Admin/checker");
-        if(check.equals("1")) {
-            m = adminService.AddChecker(user);
-            System.out.println("check m ="+m);
-            if(m)
-                mav.addObject("flag","1");
+        if(code.equalsIgnoreCase(code1) == false) {
+            mav.addObject("checkCodes","10");
+            return mav;
+        }
+        else {
+            if (positions.equals("管理员"))
+                user.setPositions(0);
             else
-                mav.addObject("flag","2");
+                user.setPositions(1);
+            System.out.println(user);
+            boolean m = false;
+            System.out.println(check);
+
+            if (check.equals("1")) {
+                m = adminService.AddChecker(user);
+                System.out.println("check m =" + m);
+                if (m)
+                    mav.addObject("flag", "1");
+                else
+                    mav.addObject("flag", "2");
+            } else if (check.equals("0")) {
+                m = adminService.updatasType(user);
+                System.out.println("check m = " + m);
+                if (m)
+                    mav.addObject("flag", "4");
+                else
+                    mav.addObject("flag", "5");
+            }
+            return mav;
         }
-        else if(check.equals("0")){
-            m = adminService.updatasType(user);
-            System.out.println("check m = "+m);
-            if (m)
-                mav.addObject("flag", "4");
-             else
-                mav.addObject("flag", "5");
-        }
-        return  mav;
     }
 
 }

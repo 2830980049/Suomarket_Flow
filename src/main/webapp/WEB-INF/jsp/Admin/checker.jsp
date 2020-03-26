@@ -108,6 +108,7 @@
 
 <%
     String flag = (String) request.getAttribute("flag");
+    String checkCodes = (String)request.getAttribute("checkCodes");
     if (flag == "1") {%>
 <script>
     swal("添加成功！", "信息已全部添加到数据库！", "success");
@@ -131,7 +132,13 @@
     swal("修改失败！", "未知错误！", "error");
 </script>
 <%}%>
-
+<%
+    if(checkCodes == "10"){
+%>
+    <script>swal("验证码错误！", "已知错误！", "error");</script>
+<%
+    }
+%>
 
 <div class="wrapper">
     <header class="main-header">
@@ -260,7 +267,6 @@
                                 <td><label>验证码</label></td>
                                 <td>
                                     <input class="code" required id="checkCode" name="checkCode"  type="text"/>
-                                    <span class="msg-default hidden"></span>
                                     <img id="change" name="change" onclick="checkCodes()" src="<%=ctxPath%>/KaptchaServlet">
                                 </td>
                             </tr>
@@ -284,7 +290,8 @@
         <div class="pull-right hidden-xs">
             <b>Version</b> 1.0.0
         </div>
-        <strong>CRAETE TO 2019.12.4 Admin WUQILI.</strong> 保留所有权
+        <strong>CRAETE TO 2019.12.4 Admin WUQILI.</strong> 保留所有权<br/><br/>
+        <strong><a href="http://www.beian.miit.gov.cn/" style="color: #605ca8">黔ICP备20002057号</a> </strong>
     </footer>
     <script type="text/javascript">
 

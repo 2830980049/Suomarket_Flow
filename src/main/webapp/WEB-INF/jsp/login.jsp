@@ -50,6 +50,13 @@
         </form>
     </div>
 </div>
+<footer class="main-footer">
+    <div class="pull-right hidden-xs">
+        <b>Version</b> 1.0.0
+    </div>
+    <strong>CRAETE TO 2019.12.4 Admin WUQILI.</strong> 保留所有权<br/><br/>
+    <strong><a href="http://www.beian.miit.gov.cn/" style="color: #605ca8">黔ICP备20002057号</a> </strong>
+</footer>
 <script type="text/javascript">
     function checkCodes() {
         var idx = document.getElementById("change");
